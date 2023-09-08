@@ -30,7 +30,6 @@ public class GASToolBelt : ModuleRules
 				"Engine",
 				"InputCore",
 				"UMG",
-				"GameplayAbilities",
 				"GameFeatures",
 				"EnhancedInput"
 				// ... add other public dependencies that you statically link with here ...
@@ -43,6 +42,7 @@ public class GASToolBelt : ModuleRules
 			{
 				"GameplayTasks",
 				"GameplayTags",
+				"GameplayAbilities",
 				"AIModule",
 				"Slate",
 				"SlateCore",
