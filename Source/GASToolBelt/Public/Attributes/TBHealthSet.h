@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemComponent.h"
 #include "TBAttributeSet.h"
 #include "TBHealthSet.generated.h"
 
@@ -13,6 +14,8 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthDepleted, FGameplayAttributeData, healthAttribute, float, previousValue);
+
 /**
  * 
  */
@@ -22,6 +25,10 @@ class GASTOOLBELT_API UTBHealthSet : public UTBAttributeSet
 	GENERATED_BODY()
 
 public:
+	// Delegate called when the Health Reaches 0
+	UPROPERTY(BlueprintAssignable, BlueprintReadOnly, Category="Health")
+	FOnHealthDepleted OnHealthDepletedDelegate;
+	
 	// AttributeSet Overrides
 	virtual void PreAttributeChange(const FGameplayAttribute& attribute, float& newValue) override;
 
@@ -38,11 +45,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UTBHealthSet, MaxHealth)
+
+	// Check if Health has been depleted and call the delegate. 
+	virtual void PostAttributeChange(const FGameplayAttribute& attribute, float oldValue, float newValue) override;
 	
 	/**
 	* These OnRep functions exist to make sure that the ability system internal representations are synchronized properly during replication
 	**/
-
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& oldHealth);
 
