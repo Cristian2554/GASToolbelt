@@ -20,6 +20,22 @@ void UTBHealthSet::PreAttributeChange(const FGameplayAttribute& attribute, float
 	}
 }
 
+void UTBHealthSet::PreAttributeBaseChange(const FGameplayAttribute& attribute, float& newValue) const
+{
+	Super::PreAttributeBaseChange(attribute, newValue);
+
+	// Make sure that Health is always within 0 and the Max Value. 
+	if (GetHealthAttribute() == attribute)
+	{
+		newValue = FMath::Clamp(newValue, 0.0f, GetMaxHealth());
+	}
+	// If a Max value changes, adjust current to keep Current % of Current to Max
+	else if (GetMaxHealthAttribute() == attribute)
+	{
+		AdjustAttributeForMaxChange(GetHealth(), GetMaxHealth(), newValue, GetHealthAttribute());
+	}
+}
+
 void UTBHealthSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

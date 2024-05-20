@@ -32,6 +32,8 @@ public:
 	// AttributeSet Overrides
 	virtual void PreAttributeChange(const FGameplayAttribute& attribute, float& newValue) override;
 
+	virtual void PreAttributeBaseChange(const FGameplayAttribute& attribute, float& newValue) const override;
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Current Health, when 0 we expect owner to die unless prevented by an ability. Capped by MaxHealth.
